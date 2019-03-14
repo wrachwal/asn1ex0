@@ -43,7 +43,7 @@
 	 parse_and_save/2,verbose/3,warning/3,warning/4,error/3,format_error/1]).
 -export([get_bit_string_format/0,use_legacy_types/0]).
 
--include("asn1_records.hrl").
+-include_lib("asn1/src/asn1_records.hrl").
 -include_lib("stdlib/include/erl_compile.hrl").
 -include_lib("kernel/include/file.hrl").
 
@@ -199,8 +199,12 @@ check_pass(#st{code=M,file=File,includes=Includes,
 			   inputmodules=InputModules,
 			   options=Opts,
 			   sourcedir=filename:dirname(File)},
+	    DbFile0 = DbFile ++ ".0",
+	    asn1_db:dbsave(DbFile0, M#module.name),
+	    verbose("--~p--~n", [{generated,DbFile0}], Opts),
 	    case asn1ct_check:check(State, Module#module.typeorval) of
 		{error,Reason} ->
+		    file:delete(DbFile0),
 		    {error,St#st{error=Reason}};
 		{ok,NewTypeOrVal,GenTypeOrVal} ->
 		    NewM = Module#module{typeorval=NewTypeOrVal},
