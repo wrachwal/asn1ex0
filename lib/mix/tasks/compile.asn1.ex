@@ -79,7 +79,8 @@ defmodule Mix.Tasks.Compile.Asn1 do
   defp module_files(dest_dir, module) do
     [Path.join([dest_dir, module <> ".erl"]),
      Path.join([dest_dir, module <> ".hrl"]),
-     Path.join([dest_dir, module <> ".asn1db"])]
+     Path.join([dest_dir, module <> ".asn1db"]),
+     Path.join([dest_dir, module <> ".asn1db.0"])]
   end
 
   defp module_from_asn(asn) do
